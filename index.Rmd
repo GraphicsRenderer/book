@@ -14,7 +14,6 @@ titlepage: true
 titlepage-color: "34495e"
 titlepage-text-color: "ecf0f1"
 toc-own-page: true
-listings-disable-line-numbers: true
 
 mainfont: "LXGWWenKai-Regular"
 CJKmainfont: "LXGWWenKai-Regular"
@@ -26,7 +25,7 @@ bibliography: [reference.bib]
 link-citations: yes
 ---
 
-# 前言
+# 前言 {-}
 
 在我读大学的时候，3D游戏引擎还没有那么流行，学校也没有开设相关的课程。事实上，作为计算机系的学生，依旧很难接触到计算机图形学。我接触的第一个游戏框架是苹果iOS平台的SpriteKit，而当时市场上大多数游戏则使用了Cocos2D。这些2D引擎给我造成了极大的误解，单纯地以为游戏的画面是由图片和颜色构成。因此在我创业之前，我根本没有意识到图形学的困难所在。2016年正值虚拟现实的萌芽阶段，在学习了两个星期的Unity引擎之后，我在新加坡创立了[VRcollab，https://vrcollab.com](https://vrcollab.com) 公司，并着手研发建筑虚拟现实软件。
 
