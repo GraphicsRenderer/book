@@ -9,9 +9,7 @@ bookdown::gitbook:
     edit: https://github.com/SoftwareRenderer/book/edit/master/%s
     download: ["pdf", "epub"]
 bookdown::pdf_book:
-  includes:
-    in_header: preamble.tex
+  template: templates/eisvogel.latex
   latex_engine: xelatex
-  citation_package: biblatex
-  keep_tex: yes
+  pandoc_args: ["--top-level-division=chapter", "--listing", "--quiet"]
 bookdown::epub_book: default

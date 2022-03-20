@@ -1,16 +1,28 @@
 --- 
 title: "软件光栅渲染器"
+subtitle: "从软件光栅化角度深入解析图形渲染管线"
 author: "Yiwei Gong"
-date: "`r Sys.Date()`"
-site: bookdown::bookdown_site
-documentclass: book
-bibliography: [reference.bib]
+keywords: [计算机图形学, 渲染管线, 光栅化]
 url: https://github.com/SoftwareRenderer/book
-# cover-image: path to the social sharing image like images/cover.jpg
-description: |
-  从软件光栅化角度深入解析图形渲染管线。
-link-citations: yes
 github-repo: SoftwareRenderer/book
+rights: CC0 1.0 Universal
+site: bookdown::bookdown_site
+
+book: true
+classoption: "oneside"
+titlepage: true
+titlepage-color: "34495e"
+titlepage-text-color: "ecf0f1"
+toc-own-page: true
+
+mainfont: "LXGWWenKai-Regular"
+CJKmainfont: "LXGWWenKai-Regular"
+sansfont: "LXGWWenKai-Regular"
+CJKsansfont: "LXGWWenKai-Regular"
+monofont: "LXGWWenKaiMono-Regular"
+
+bibliography: [reference.bib]
+link-citations: yes
 ---
 
 # 前言
