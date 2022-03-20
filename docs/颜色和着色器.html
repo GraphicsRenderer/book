@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 颜色和着色器 | 软件光栅渲染器</title>
+  <meta name="description" content="Chapter 2 颜色和着色器 | 软件光栅渲染器" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 颜色和着色器 | 软件光栅渲染器" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="SoftwareRenderer/book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 颜色和着色器 | 软件光栅渲染器" />
+  
+  
+  
+
+<meta name="author" content="Yiwei Gong" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="线段绘制.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">软件光栅渲染器</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> 前言<span></span></a></li>
+<li class="chapter" data-level="2" data-path="颜色和着色器.html"><a href="颜色和着色器.html"><i class="fa fa-check"></i><b>2</b> 颜色和着色器<span></span></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="颜色和着色器.html"><a href="颜色和着色器.html#第一个实验c生成单颜色图片"><i class="fa fa-check"></i><b>2.1</b> 第一个实验：C++生成单颜色图片<span></span></a></li>
+<li class="chapter" data-level="2.2" data-path="颜色和着色器.html"><a href="颜色和着色器.html#第二个实验屏幕空间坐标和着色器"><i class="fa fa-check"></i><b>2.2</b> 第二个实验：屏幕空间坐标和着色器<span></span></a></li>
+<li class="chapter" data-level="2.3" data-path="颜色和着色器.html"><a href="颜色和着色器.html#像素着色器的魔法"><i class="fa fa-check"></i><b>2.3</b> 像素着色器的魔法<span></span></a></li>
+<li class="chapter" data-level="2.4" data-path="颜色和着色器.html"><a href="颜色和着色器.html#小结"><i class="fa fa-check"></i><b>2.4</b> 小结<span></span></a></li>
+<li class="chapter" data-level="2.5" data-path="颜色和着色器.html"><a href="颜色和着色器.html#思考和扩展"><i class="fa fa-check"></i><b>2.5</b> 思考和扩展<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="线段绘制.html"><a href="线段绘制.html"><i class="fa fa-check"></i><b>3</b> 线段绘制<span></span></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="线段绘制.html"><a href="线段绘制.html#线段的参数方程绘制"><i class="fa fa-check"></i><b>3.1</b> 线段的参数方程绘制<span></span></a></li>
+<li class="chapter" data-level="3.2" data-path="线段绘制.html"><a href="线段绘制.html#像素空间绘制"><i class="fa fa-check"></i><b>3.2</b> 像素空间绘制<span></span></a></li>
+<li class="chapter" data-level="3.3" data-path="线段绘制.html"><a href="线段绘制.html#bresenham直线算法"><i class="fa fa-check"></i><b>3.3</b> Bresenham直线算法<span></span></a></li>
+</ul></li>
+<li><a href="文献引用.html#文献引用">文献引用<span></span></a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">使用bookdown创作</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">软件光栅渲染器</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="颜色和着色器" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> 颜色和着色器<a href="颜色和着色器.html#颜色和着色器" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>对于刚接触图形学的人来说，第一个想要了解的问题，图形学研究的是什么？简要的回答是，图形学研究渲染器中的理论，算法和工程架构。所谓的渲染器不过是一个简单的程序，输入一个描述3D场景的场景文件，输出这个场景所对应的一张图片。</p>
+<p>大多数人对于图片的概念，不过是电脑上的JPG和PNG文件。如果使用Photoshop之类的软件打开任何一张图片，就会发现图片由一组带颜色的小格子构成.每一个格子称之为<strong>像素</strong>。对于每一个像素来言，一般来说由三种颜色构成，或者称为三个通道，即红绿蓝通道。每一个通道的取值均为<span class="math inline">\([0,1]\)</span>。对于一些半透明的图片来说，还会引入第四个通道，即透明通道。同样透明通道的的取值范围也是<span class="math inline">\([0,1]\)</span>。</p>
+<p>如果一个像素的颜色为<span class="math inline">\((1,0,0,1)\)</span>，像素的四个通道一般情况以RGBA的顺序排列，那么很显然这个像素为红色。同样的，如果是<span class="math inline">\((1,1,0,1)\)</span>，那么该像素呈现红色和绿色的混合颜色黄色。</p>
+<p>对于每一个像素来说，由于<span class="math inline">\([0,1]\)</span>是一个浮点数，如果我们单纯使用单精度浮点类型<code>float</code>进行存储，对于一个包含RGBA四通道的像素来说，其大小为<span class="math inline">\(32*4\)</span>，128个bit，即16个byte。对于一张1920x1080分辨率的图片来说，这需要<span class="math inline">\(16*1920*1080=33177600\)</span>个byte，相当于32MB的大小。事实上，人眼分辨颜色的能力是有限的，如果我们仅仅使用8个bit来表示一个通道，那么对于每个通道我们将会获得256种颜色。红色，绿色，蓝色的混合可以得到<span class="math inline">\(256*256*256\)</span>，大约一千六百万种颜色。8bit相对32bit，每个像素仅仅需要4个byte即可存储，通过一些合适的压缩算法，我们就能将一张1920x1080分辨率的图片合理压缩到2~3MB的大小。</p>
+<p>因此，绝大部分的图片和颜色都采用8bit的方式来存储。由于8bit刚好可以用<span class="math inline">\([0,255]\)</span>区间的整数或者是两个16进制数表示，很多程序，比如HTML，就会使用16进制颜色编码来，例如<code>#2980b9ff</code>，来表示颜色。在C语言中，我们则可以使用<code>char</code>类型来表示一个通道的数值。</p>
+<div id="第一个实验c生成单颜色图片" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> 第一个实验：C++生成单颜色图片<a href="颜色和着色器.html#第一个实验c生成单颜色图片" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>有了对图片和像素的基本了解，我们不妨在C++做一个小实验来生成一张只有颜色的图片。</p>
+<p>既然要生成图片，首先我们要考虑图片的格式。对于绝大多数的图片格式来说，其像素都是由一个一维数组构成。其数组的长度等于图片的宽度乘以图片的高度乘以每个像素的通道数量，即：</p>
+<p><span class="math display">\[
+len = width * height * channels
+\]</span></p>
+<p><code>stb</code>是一个小巧的C++头文件库，提供了基础图片格式的读写操作。我们可以通过GitHub获取，<a href="https://github.com/nothings/stb/blob/master/stb_image_write.h">https://github.com/nothings/stb/blob/master/stb_image_write.h</a>。</p>
+<p>在此，我们将使用<code>stbi_write_png(char const *filename, int w, int h, int comp, const void *data, int stride_in_bytes)</code>函数将我们的图片数据保存为PNG格式。</p>
+<p><code>stbi_write_png</code>函数由六个参数构成，第一个参数是文件路径，第二和第三个参数是图片的宽度和高度。第四个参数表示图片数据的通道数量。由于不需要使用透明通道，因此三通道图片即可满足要求。第五个参数表示图片数据。由于我们的图片数据是一个一维数组，<code>stride_in_bytes</code>则表示每行的像素数据的长度。</p>
+<p>了解了<code>stbi_write_png</code>函数的参数，在我们的例子中，我们可以将其简化为<code>stbi_write_png(char const *filename, int w, int h, 3, const void *data, w*3)</code>。</p>
+<p>下面关注数据部分。我们只需要生成一张不透明的颜色图，假定其为200x200分辨率，同时使用8 Bit颜色格式。因此，我们只需要声明一段像素数组：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="颜色和着色器.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> pixels<span class="op">[</span><span class="dv">200</span><span class="op">*</span><span class="dv">200</span><span class="op">*</span><span class="dv">3</span><span class="op">];</span></span></code></pre></div>
+<p>最后我们将其组装在一起，得到我们的第一个小程序：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cc"><code class="sourceCode cpp"><span id="cb2-1"><a href="颜色和着色器.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// single-color.cpp</span></span>
+<span id="cb2-2"><a href="颜色和着色器.html#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="颜色和着色器.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">// This line is required for stb image library</span></span>
+<span id="cb2-4"><a href="颜色和着色器.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define STB_IMAGE_WRITE_IMPLEMENTATION</span></span>
+<span id="cb2-5"><a href="颜色和着色器.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#define STB_IMAGE_WRITE_STATIC</span></span>
+<span id="cb2-6"><a href="颜色和着色器.html#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stb/stb_image_write.h&gt;</span></span>
+<span id="cb2-7"><a href="颜色和着色器.html#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="颜色和着色器.html#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb2-9"><a href="颜色和着色器.html#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> w <span class="op">=</span> <span class="dv">200</span><span class="op">;</span></span>
+<span id="cb2-10"><a href="颜色和着色器.html#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> h <span class="op">=</span> <span class="dv">200</span><span class="op">;</span></span>
+<span id="cb2-11"><a href="颜色和着色器.html#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> c <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb2-12"><a href="颜色和着色器.html#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="颜色和着色器.html#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="dt">char</span> pixels<span class="op">[</span>w <span class="op">*</span> h <span class="op">*</span> c<span class="op">];</span></span>
+<span id="cb2-14"><a href="颜色和着色器.html#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span> x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> x <span class="op">&lt;</span> w<span class="op">;</span> x<span class="op">++)</span></span>
+<span id="cb2-15"><a href="颜色和着色器.html#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span> y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> y <span class="op">&lt;</span> h<span class="op">;</span> y<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb2-16"><a href="颜色和着色器.html#cb2-16" aria-hidden="true" tabindex="-1"></a>      pixels<span class="op">[(</span>y <span class="op">*</span> w <span class="op">+</span> x<span class="op">)</span> <span class="op">*</span> c <span class="op">+</span> <span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="op">(</span><span class="dt">char</span><span class="op">)</span><span class="dv">255</span><span class="op">;</span></span>
+<span id="cb2-17"><a href="颜色和着色器.html#cb2-17" aria-hidden="true" tabindex="-1"></a>      pixels<span class="op">[(</span>y <span class="op">*</span> w <span class="op">+</span> x<span class="op">)</span> <span class="op">*</span> c <span class="op">+</span> <span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="op">(</span><span class="dt">char</span><span class="op">)</span><span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-18"><a href="颜色和着色器.html#cb2-18" aria-hidden="true" tabindex="-1"></a>      pixels<span class="op">[(</span>y <span class="op">*</span> w <span class="op">+</span> x<span class="op">)</span> <span class="op">*</span> c <span class="op">+</span> <span class="dv">2</span><span class="op">]</span> <span class="op">=</span> <span class="op">(</span><span class="dt">char</span><span class="op">)</span><span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-19"><a href="颜色和着色器.html#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-20"><a href="颜色和着色器.html#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="颜色和着色器.html#cb2-21" aria-hidden="true" tabindex="-1"></a>  stbi_write_png<span class="op">(</span><span class="st">&quot;single-color.png&quot;</span><span class="op">,</span> w<span class="op">,</span> h<span class="op">,</span> c<span class="op">,</span> pixels<span class="op">,</span> w <span class="op">*</span> <span class="dv">3</span><span class="op">);</span></span>
+<span id="cb2-22"><a href="颜色和着色器.html#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-23"><a href="颜色和着色器.html#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>我们编译并运行该程序，即可获得一张名为<code>single_color.png</code>的红色图片。</p>
+<p><img src="code/01-color/single-color.png" title="Single Color" /></p>
+<p>接下来，我们将在这个基础上，做一些简单的调整，让我们输出的图片更加的漂亮。</p>
+</div>
+<div id="第二个实验屏幕空间坐标和着色器" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> 第二个实验：屏幕空间坐标和着色器<a href="颜色和着色器.html#第二个实验屏幕空间坐标和着色器" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>在第一个实验中，我们通过设置像素数组的数值来实现输出颜色的目的。我们不妨把程序做一个稍稍的整理。</p>
+<p>首先是颜色，由于每一个像素都由三个通道构成，我们可以如此定义颜色：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cc"><code class="sourceCode cpp"><span id="cb3-1"><a href="颜色和着色器.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Color <span class="op">{</span></span>
+<span id="cb3-2"><a href="颜色和着色器.html#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">char</span> r<span class="op">;</span></span>
+<span id="cb3-3"><a href="颜色和着色器.html#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">char</span> g<span class="op">;</span></span>
+<span id="cb3-4"><a href="颜色和着色器.html#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">char</span> b<span class="op">;</span></span>
+<span id="cb3-5"><a href="颜色和着色器.html#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>那么我们像素数组即变成:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cc"><code class="sourceCode cpp"><span id="cb4-1"><a href="颜色和着色器.html#cb4-1" aria-hidden="true" tabindex="-1"></a>Color pixels<span class="op">[</span>width<span class="op">*</span>height<span class="op">];</span></span></code></pre></div>
+<p>得益于C++的特性，虽然我们增加了<code>Color</code>类型，但数据在内存排布上和之前的数组则没有任何差别。</p>
+<p>我们再将生成颜色的代码整理成一个函数，以便我们更好的控制颜色的生成过程。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cc"><code class="sourceCode cpp"><span id="cb5-1"><a href="颜色和着色器.html#cb5-1" aria-hidden="true" tabindex="-1"></a>Color PixelColor<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">,</span> <span class="dt">int</span> width<span class="op">,</span> <span class="dt">int</span> height<span class="op">);</span></span></code></pre></div>
+<p>这里我们注意到，我们需要传递四个参数。然而在渲染过程中，我们大多只关心渲染的结果，而忽略渲染输出的分辨率。同一张图片，只要长宽比相同，1080P和4K应该仅仅只有清晰度的区别，而不会有任何内容上的不同。</p>
+<p>对此，我们可以将<code>PixelColor</code>函数做一个简单的简化：</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode cc"><code class="sourceCode cpp"><span id="cb6-1"><a href="颜色和着色器.html#cb6-1" aria-hidden="true" tabindex="-1"></a>Color PixelColor<span class="op">(</span><span class="dt">float</span> u<span class="op">,</span> <span class="dt">float</span> v<span class="op">);</span></span></code></pre></div>
+<p>其中<code>u = x/(float)width</code>，<code>v = y/(float)height</code>。经过此变换，一个像素的颜色仅仅只和这个像素在屏幕上的位置相关，和屏幕的分辨率的大小不相关。</p>
+<p>最后，我们将这些组件拼装在一起，并生成一张具有渐变颜色的图片。</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode cc"><code class="sourceCode cpp"><span id="cb7-1"><a href="颜色和着色器.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">// gradient-color.cpp</span></span>
+<span id="cb7-2"><a href="颜色和着色器.html#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="颜色和着色器.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">// This line is required for stb image library</span></span>
+<span id="cb7-4"><a href="颜色和着色器.html#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define STB_IMAGE_WRITE_IMPLEMENTATION</span></span>
+<span id="cb7-5"><a href="颜色和着色器.html#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#define STB_IMAGE_WRITE_STATIC</span></span>
+<span id="cb7-6"><a href="颜色和着色器.html#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stb/stb_image_write.h&gt;</span></span>
+<span id="cb7-7"><a href="颜色和着色器.html#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="颜色和着色器.html#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Color <span class="op">{</span></span>
+<span id="cb7-9"><a href="颜色和着色器.html#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">char</span> r<span class="op">;</span></span>
+<span id="cb7-10"><a href="颜色和着色器.html#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">char</span> g<span class="op">;</span></span>
+<span id="cb7-11"><a href="颜色和着色器.html#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">char</span> b<span class="op">;</span></span>
+<span id="cb7-12"><a href="颜色和着色器.html#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb7-13"><a href="颜色和着色器.html#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="颜色和着色器.html#cb7-14" aria-hidden="true" tabindex="-1"></a>Color PixelColor<span class="op">(</span><span class="dt">float</span> u<span class="op">,</span> <span class="dt">float</span> v<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-15"><a href="颜色和着色器.html#cb7-15" aria-hidden="true" tabindex="-1"></a>  Color c<span class="op">;</span></span>
+<span id="cb7-16"><a href="颜色和着色器.html#cb7-16" aria-hidden="true" tabindex="-1"></a>  c<span class="op">.</span>r <span class="op">=</span> <span class="op">(</span><span class="dt">char</span><span class="op">)(</span>u <span class="op">*</span> <span class="dv">255</span><span class="op">);</span></span>
+<span id="cb7-17"><a href="颜色和着色器.html#cb7-17" aria-hidden="true" tabindex="-1"></a>  c<span class="op">.</span>g <span class="op">=</span> <span class="op">(</span><span class="dt">char</span><span class="op">)(</span>v <span class="op">*</span> <span class="dv">255</span><span class="op">);</span></span>
+<span id="cb7-18"><a href="颜色和着色器.html#cb7-18" aria-hidden="true" tabindex="-1"></a>  c<span class="op">.</span>b <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-19"><a href="颜色和着色器.html#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> c<span class="op">;</span></span>
+<span id="cb7-20"><a href="颜色和着色器.html#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb7-21"><a href="颜色和着色器.html#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="颜色和着色器.html#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb7-23"><a href="颜色和着色器.html#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> w <span class="op">=</span> <span class="dv">200</span><span class="op">;</span></span>
+<span id="cb7-24"><a href="颜色和着色器.html#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> h <span class="op">=</span> <span class="dv">200</span><span class="op">;</span></span>
+<span id="cb7-25"><a href="颜色和着色器.html#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> c <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb7-26"><a href="颜色和着色器.html#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="颜色和着色器.html#cb7-27" aria-hidden="true" tabindex="-1"></a>  Color pixels<span class="op">[</span>w <span class="op">*</span> h<span class="op">];</span></span>
+<span id="cb7-28"><a href="颜色和着色器.html#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span> x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> x <span class="op">&lt;</span> w<span class="op">;</span> x<span class="op">++)</span></span>
+<span id="cb7-29"><a href="颜色和着色器.html#cb7-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span> y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> y <span class="op">&lt;</span> h<span class="op">;</span> y<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-30"><a href="颜色和着色器.html#cb7-30" aria-hidden="true" tabindex="-1"></a>      <span class="kw">auto</span> u <span class="op">=</span> x <span class="op">/</span> <span class="op">(</span><span class="dt">float</span><span class="op">)</span>w<span class="op">;</span></span>
+<span id="cb7-31"><a href="颜色和着色器.html#cb7-31" aria-hidden="true" tabindex="-1"></a>      <span class="kw">auto</span> v <span class="op">=</span> y <span class="op">/</span> <span class="op">(</span><span class="dt">float</span><span class="op">)</span>h<span class="op">;</span></span>
+<span id="cb7-32"><a href="颜色和着色器.html#cb7-32" aria-hidden="true" tabindex="-1"></a>      pixels<span class="op">[</span>y <span class="op">*</span> w <span class="op">+</span> x<span class="op">]</span> <span class="op">=</span> PixelColor<span class="op">(</span>u<span class="op">,</span> v<span class="op">);</span></span>
+<span id="cb7-33"><a href="颜色和着色器.html#cb7-33" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-34"><a href="颜色和着色器.html#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="颜色和着色器.html#cb7-35" aria-hidden="true" tabindex="-1"></a>  stbi_write_png<span class="op">(</span><span class="st">&quot;gradient-color.png&quot;</span><span class="op">,</span> w<span class="op">,</span> h<span class="op">,</span> c<span class="op">,</span> pixels<span class="op">,</span> w <span class="op">*</span> <span class="dv">3</span><span class="op">);</span></span>
+<span id="cb7-36"><a href="颜色和着色器.html#cb7-36" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-37"><a href="颜色和着色器.html#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><img src="code/01-color/gradient-color.png" title="Gradient Color" /></p>
+<p>让我们来回顾一下我们在实验中用到的函数和参数。</p>
+<p>首先我们建立起了屏幕空间的坐标系，这一个坐标系在左上方为<span class="math inline">\((0,0)\)</span>，右下方为<span class="math inline">\((1,1)\)</span>。图片的颜色仅仅和坐标系的坐标有关，而和屏幕的大小无关。我们在之后空间变换的部分还会重新回顾屏幕空间坐标系。</p>
+<p>第二个重要的改变是我们把具体的颜色生成过程移动到了<code>PixelColor</code>函数中去。该函数会生成每一个像素的颜色。我们把计算像素颜色的过程称之为<strong>着色</strong>，而负责着色的函数则称之为<strong>着色器</strong>。</p>
+<p>我们会在后续的章节继续介绍<strong>着色器</strong>的概念。如果你曾经接触过一些图形学的书籍，事实上，在此我们所写的<code>PixelColor</code>函数就是一个简化的像素着色器。</p>
+<p>更重要的是，<code>PixelColor</code>函数只关心一个像素的颜色，而不关心周围像素的颜色，也不使用任何其他像素的颜色作为其计算的基础。因此该函数没有任何的依赖关系。正是如此，像素着色器能够被高度的并行优化，而在GPU上，每一个像素着色器都是并行计算，从而实现快速实时渲染。</p>
+</div>
+<div id="像素着色器的魔法" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> 像素着色器的魔法<a href="颜色和着色器.html#像素着色器的魔法" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>虽然我们的程序很短，实际上我们已经实现了一个完整的像素着色的过程。仅仅依赖于像素着色器，和GPU的并行计算的优势，我们就可以创建无数优美的图画。</p>
+<p><a href="https://www.shadertoy.com/">ShaderToy</a>是一家专注于发布和分享像素着色器的平台。无数的艺术家、程序员在上面创建了各种魔法般的图案。</p>
+<p><img src="code/01-color/shadertoy.png" title="Shader Toy" /></p>
+<p>图片来自<a href="https://www.shadertoy.com/view/ltfXzj">https://www.shadertoy.com/view/ltfXzj</a></p>
+</div>
+<div id="小结" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> 小结<a href="颜色和着色器.html#小结" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>本章节中，我们介绍了图片和颜色的格式，并且通过C++生成了简单的图片。在我们正式进入到渲染管线之前，我们都会通过图片的形式来演示光栅化的过程。</p>
+<p>我们还引出了屏幕空间的概念，在本章节的屏幕坐标系中，是一个仅有二维坐标，并且取值范围在<span class="math inline">\([0,1]\)</span>的空间。</p>
+<p>紧接着，我们讨论了着色过程和像素着色器。像素着色器真正揭示了GPU的并行原理。因为每个像素着色器互不依赖，因此GPU才可以同时计算每个像素的颜色。</p>
+<p>整个图形学研究的内容就是如何快速地，更逼真地对场景完成整个着色过程。下一章节，我们将从最简单的几何图形出发，为我们的渲染器增加图元渲染的能力。</p>
+</div>
+<div id="思考和扩展" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> 思考和扩展<a href="颜色和着色器.html#思考和扩展" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>如何绘制一个带有半透明背景的图片。</li>
+<li>如何绘制一个红色的圆形。</li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="线段绘制.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/SoftwareRenderer/book/edit/master/01-color.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["SoftwareRenderer.pdf", "SoftwareRenderer.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

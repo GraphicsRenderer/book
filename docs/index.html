@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>软件光栅渲染器</title>
+  <meta name="description" content="软件光栅渲染器" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="软件光栅渲染器" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="SoftwareRenderer/book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="软件光栅渲染器" />
+  
+  
+  
+
+<meta name="author" content="Yiwei Gong" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="颜色和着色器.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">软件光栅渲染器</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> 前言<span></span></a></li>
+<li class="chapter" data-level="2" data-path="颜色和着色器.html"><a href="颜色和着色器.html"><i class="fa fa-check"></i><b>2</b> 颜色和着色器<span></span></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="颜色和着色器.html"><a href="颜色和着色器.html#第一个实验c生成单颜色图片"><i class="fa fa-check"></i><b>2.1</b> 第一个实验：C++生成单颜色图片<span></span></a></li>
+<li class="chapter" data-level="2.2" data-path="颜色和着色器.html"><a href="颜色和着色器.html#第二个实验屏幕空间坐标和着色器"><i class="fa fa-check"></i><b>2.2</b> 第二个实验：屏幕空间坐标和着色器<span></span></a></li>
+<li class="chapter" data-level="2.3" data-path="颜色和着色器.html"><a href="颜色和着色器.html#像素着色器的魔法"><i class="fa fa-check"></i><b>2.3</b> 像素着色器的魔法<span></span></a></li>
+<li class="chapter" data-level="2.4" data-path="颜色和着色器.html"><a href="颜色和着色器.html#小结"><i class="fa fa-check"></i><b>2.4</b> 小结<span></span></a></li>
+<li class="chapter" data-level="2.5" data-path="颜色和着色器.html"><a href="颜色和着色器.html#思考和扩展"><i class="fa fa-check"></i><b>2.5</b> 思考和扩展<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="线段绘制.html"><a href="线段绘制.html"><i class="fa fa-check"></i><b>3</b> 线段绘制<span></span></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="线段绘制.html"><a href="线段绘制.html#线段的参数方程绘制"><i class="fa fa-check"></i><b>3.1</b> 线段的参数方程绘制<span></span></a></li>
+<li class="chapter" data-level="3.2" data-path="线段绘制.html"><a href="线段绘制.html#像素空间绘制"><i class="fa fa-check"></i><b>3.2</b> 像素空间绘制<span></span></a></li>
+<li class="chapter" data-level="3.3" data-path="线段绘制.html"><a href="线段绘制.html#bresenham直线算法"><i class="fa fa-check"></i><b>3.3</b> Bresenham直线算法<span></span></a></li>
+</ul></li>
+<li><a href="文献引用.html#文献引用">文献引用<span></span></a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">使用bookdown创作</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">软件光栅渲染器</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">软件光栅渲染器</h1>
+<h2 class="subtitle"><em>从软件光栅化角度深入解析图形渲染管线</em></h2>
+<p class="author"><em>Yiwei Gong</em></p>
+</div>
+<div id="前言" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> 前言<a href="index.html#前言" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>在我读大学的时候，3D游戏引擎还没有那么流行，学校也没有开设相关的课程。事实上，作为计算机系的学生，依旧很难接触到计算机图形学。我接触的第一个游戏框架是苹果iOS平台的SpriteKit，而当时市场上大多数游戏则使用了Cocos2D。这些2D引擎给我造成了极大的误解，单纯地以为游戏的画面是由图片和颜色构成。因此在我创业之前，我根本没有意识到图形学的困难所在。2016年正值虚拟现实的萌芽阶段，在学习了两个星期的Unity引擎之后，我在新加坡创立了<a href="https://vrcollab.com">VRcollab，https://vrcollab.com</a> 公司，并着手研发建筑虚拟现实软件。</p>
+<p>我们制作了一款建筑模型一键生成VR场景的软件，同时我们还允许多个用户在场景中共同交流。起初，我并不了解着色的概念，只是简单的写了一个材质转换器，将建筑软件中的材质转换成Unity材质。最初的版本只有颜色和颜色贴图。然而很快，我们在制作转换器的过程中就遇到了难题。Unity的表面着色器使用的参数是光滑度，而少部分建筑软件采用的是粗糙度。由于并不知道着色器的原理，我们在导入过程中，将这些值全部归一转换为光滑度。对于数值的处理是相对简单的，然而当遇到光滑度贴图和粗糙度贴图的时候，我们不得不针对每一个像素进行处理并生成新的贴图，这一操作不仅增加了内存的占用，同时也拖慢软件的整体运行速度。从那时起，我才真正开始接触着色器和计算机图形学。</p>
+<p>事实上，图形学满足了我个人的所有爱好。我小时的梦想是成为一个电影特效工程师。我当时并不知道电影特效是如何制作的，只是简单地认为，如果能把科技和艺术相结合，会是很美好和极具意义的。另一方面是对数学的热爱，我总是能感觉到数学里的逻辑美感和形式的艺术感，在计算机图形学之前，我并不能将编程，数学和艺术完美结合一起，而之后，图形学不仅是我的工作，还是我快乐和价值的主要来源。</p>
+<p>关于这本书，是来自于一个朴素的想法。我的一位好朋友在2020年的时候，出版了《自己动手写Python虚拟机》。我突然觉得除了工作之外，应当做一些有意义的事情，不仅仅是对自己知识的一次整理，也是为更多还没有接触图形学的人介绍这一个美妙的世界。</p>
+<p>对于第一次接触图形学的人来说，即使是多年的程序员，依旧是非常困难的。从知识层面上，图形学需要有不错的数学功底和对物理模型的抽象能力，至少线性代数和微积分是不可少的。甚至仅仅编程本身，不像是手机App或是前端开发，早已有了成熟的框架和抽象层，图形学编程往往涉及到非常底层的硬件知识，OpenGL和DirectX都有着晦涩难懂的API。着色器的编程则涉及到大量的并行算法和技巧。在游戏引擎层面，则还会涉及虚拟机，Lua脚本嵌入，资源管理，内存管理等一系列琐碎的内容。因此，一个成熟的游戏引擎的难度已经不亚于一款操作系统。</p>
+<p>我看的第一本书是<a href="https://pbr-book.org/">Physically Based Rendering:From Theory To Implementation</a>。直到今天我也没有完全明白里头的技术细节。另一点，离线渲染器和实时渲染器的实现方式又截然不同。对于实时渲染器来说，如今市面上的教程大多以Unity或是虚幻引擎为多。这两款游戏引擎已经将绝大部分的实现封装完美，就开发者而言，仅仅需要关心的是上层的业务逻辑而非底层的实现。</p>
+<p>正是如此，我想写一本关于图形学底层渲染管线的书。但我并不想从OpenGL或者是DirectX入手。硬件和API的抽象对初学者来说并不友好。甚至，在某种程度上会让人产生相当的困惑。在我学习的过程中，我花了很长时间去了解顶点着色器，片元着色器的工作原理。然而由于存在硬件抽象层，很多的细节只能靠黑盒测试的方式，不断修改参数来推断其中的实现逻辑。</p>
+<p>我萌生了一个想法。以纯粹软件的角度，实现渲染管线，以便更好地调试和理解管线中的任何一点细节。事实上，虽然在GPU已经成为市场不可或缺的主导，软件渲染器依然在某些剔除算法上，发挥极大的作用。</p>
+<p>让我们带着现在的知识，回到上个世纪90年代，那个GPU还未诞生的年代。我们会以纯粹的C++代码，实现一个支持有现代GPU绝大多数功能的软件渲染器。另外，我们也会效仿那个年代的游戏，嵌入一个Lua虚拟机，并使用Lua脚本实现顶点着色器，曲面细分着色器，片元着色器。一些应用逻辑，业务逻辑的部分，我们也会通过Lua脚本的方式进行调用，最终形成一个较为完整的游戏引擎。麻雀虽小，五脏俱全，希望通过如此的方式为所有对图形学感兴趣的读者带来一个不一样的视角。</p>
+<p>我希望我能在30岁生日以前完成本书，并且作为生日礼物送给自己。本书创作过程以纯粹开源的方式进行，本书的原稿发布在GitHub共享社区，<a href="https://github.com/SoftwareRenderer/book">https://github.com/SoftwareRenderer/book</a> 。对本书中文字和技术细节的错误，欢迎在GitHub Issue页面提交和指正。</p>
+<p>感谢关注，让我们就此开始。</p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="颜色和着色器.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/SoftwareRenderer/book/edit/master/index.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["SoftwareRenderer.pdf", "SoftwareRenderer.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 线段绘制 | 软件光栅渲染器</title>
+  <meta name="description" content="Chapter 3 线段绘制 | 软件光栅渲染器" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 线段绘制 | 软件光栅渲染器" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="SoftwareRenderer/book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 线段绘制 | 软件光栅渲染器" />
+  
+  
+  
+
+<meta name="author" content="Yiwei Gong" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="颜色和着色器.html"/>
+<link rel="next" href="文献引用.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">软件光栅渲染器</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> 前言<span></span></a></li>
+<li class="chapter" data-level="2" data-path="颜色和着色器.html"><a href="颜色和着色器.html"><i class="fa fa-check"></i><b>2</b> 颜色和着色器<span></span></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="颜色和着色器.html"><a href="颜色和着色器.html#第一个实验c生成单颜色图片"><i class="fa fa-check"></i><b>2.1</b> 第一个实验：C++生成单颜色图片<span></span></a></li>
+<li class="chapter" data-level="2.2" data-path="颜色和着色器.html"><a href="颜色和着色器.html#第二个实验屏幕空间坐标和着色器"><i class="fa fa-check"></i><b>2.2</b> 第二个实验：屏幕空间坐标和着色器<span></span></a></li>
+<li class="chapter" data-level="2.3" data-path="颜色和着色器.html"><a href="颜色和着色器.html#像素着色器的魔法"><i class="fa fa-check"></i><b>2.3</b> 像素着色器的魔法<span></span></a></li>
+<li class="chapter" data-level="2.4" data-path="颜色和着色器.html"><a href="颜色和着色器.html#小结"><i class="fa fa-check"></i><b>2.4</b> 小结<span></span></a></li>
+<li class="chapter" data-level="2.5" data-path="颜色和着色器.html"><a href="颜色和着色器.html#思考和扩展"><i class="fa fa-check"></i><b>2.5</b> 思考和扩展<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="线段绘制.html"><a href="线段绘制.html"><i class="fa fa-check"></i><b>3</b> 线段绘制<span></span></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="线段绘制.html"><a href="线段绘制.html#线段的参数方程绘制"><i class="fa fa-check"></i><b>3.1</b> 线段的参数方程绘制<span></span></a></li>
+<li class="chapter" data-level="3.2" data-path="线段绘制.html"><a href="线段绘制.html#像素空间绘制"><i class="fa fa-check"></i><b>3.2</b> 像素空间绘制<span></span></a></li>
+<li class="chapter" data-level="3.3" data-path="线段绘制.html"><a href="线段绘制.html#bresenham直线算法"><i class="fa fa-check"></i><b>3.3</b> Bresenham直线算法<span></span></a></li>
+</ul></li>
+<li><a href="文献引用.html#文献引用">文献引用<span></span></a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">使用bookdown创作</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">软件光栅渲染器</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="线段绘制" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> 线段绘制<a href="线段绘制.html#线段绘制" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>在上一单元，我们了解了颜色的表示方式，基础颜色的绘制，以及基础的着色过程。对于着色过程，我们还引入了现代GPU的着色器的概念，并简单地描述了像素着色器。在这一章，我们将通过代码绘制最基础的几何图形，线段，的绘制。</p>
+<p>在数学上，线段由两个端点和端点的连线构成。对于任何一个线段，我们可以通过线段的方程<span class="math inline">\(f(x)=ax+b\)</span>来进行描述，或者我们也可以通过线段的一个端点，线段的方向，以及线段的长度来描述一个线段。</p>
+<p>假设存在一根线段，其端点为<span class="math inline">\((x_1,y_1)\)</span>，<span class="math inline">\((x_2,y_2)\)</span>，我们试着找出所有在该线段上的点。</p>
+<p>我们设向量<span class="math inline">\(\vec{L}=(x_2,y_2)-(x_1,y_1)\)</span>，那么很显然，线段上的点满足参数方程</p>
+<p><span class="math display">\[
+y = \vec{L}*t + (x_1,y_1)
+\]</span></p>
+<p>其中，<span class="math inline">\(t\)</span>的取值范围为<span class="math inline">\([0,1]\)</span>。</p>
+<p>现在让我们结合C++代码，在屏幕空间上绘制绘制一根红色的，端点为<span class="math inline">\((0.2,0.2)\)</span>和<span class="math inline">\((0.6,0.6)\)</span>的线段。</p>
+<div id="线段的参数方程绘制" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> 线段的参数方程绘制<a href="线段绘制.html#线段的参数方程绘制" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>首先要说明的是我们的坐标系，由于PNG图片的特殊性，左上角为坐标原点，右下角为坐标的<span class="math inline">\((1,1)\)</span>点，我们为了更好地贴合数学上的笛卡尔坐标系，我们将图片上下翻转，使得做左下角为原点，右上角为<span class="math inline">\((1,1)\)</span>点。</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode cc"><code class="sourceCode cpp"><span id="cb8-1"><a href="线段绘制.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Pre-defined data types</span></span>
+<span id="cb8-2"><a href="线段绘制.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;datatypes.hpp&quot;</span></span>
+<span id="cb8-3"><a href="线段绘制.html#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="线段绘制.html#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> SoftwareRenderer<span class="op">;</span></span>
+<span id="cb8-5"><a href="线段绘制.html#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="线段绘制.html#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> DrawLine<span class="op">(</span>Image<span class="op">&amp;</span> img<span class="op">,</span> Vector2f p1<span class="op">,</span> Vector2f p2<span class="op">,</span> <span class="dt">float</span> step<span class="op">,</span> Color color<span class="op">)</span></span>
+<span id="cb8-7"><a href="线段绘制.html#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-8"><a href="线段绘制.html#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> lx <span class="op">=</span> p2<span class="op">.</span>x <span class="op">-</span> p1<span class="op">.</span>x<span class="op">,</span> ly <span class="op">=</span> p2<span class="op">.</span>y <span class="op">-</span> p1<span class="op">.</span>y<span class="op">;</span></span>
+<span id="cb8-9"><a href="线段绘制.html#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span> t <span class="op">=</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">;</span> t <span class="op">&lt;=</span> <span class="fl">1.0</span><span class="bu">f</span><span class="op">;</span> t <span class="op">+=</span> step<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-10"><a href="线段绘制.html#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> x <span class="op">=</span> p1<span class="op">.</span>x <span class="op">+</span> t <span class="op">*</span> lx<span class="op">;</span></span>
+<span id="cb8-11"><a href="线段绘制.html#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> y <span class="op">=</span> p1<span class="op">.</span>y <span class="op">+</span> t <span class="op">*</span> ly<span class="op">;</span></span>
+<span id="cb8-12"><a href="线段绘制.html#cb8-12" aria-hidden="true" tabindex="-1"></a>        img<span class="op">.</span>SetColor<span class="op">(</span>img<span class="op">.</span>Width<span class="op">()</span> <span class="op">*</span> x<span class="op">,</span> img<span class="op">.</span>Height<span class="op">()</span> <span class="op">*</span> y<span class="op">,</span> color<span class="op">);</span></span>
+<span id="cb8-13"><a href="线段绘制.html#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-14"><a href="线段绘制.html#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-15"><a href="线段绘制.html#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="线段绘制.html#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
+<span id="cb8-17"><a href="线段绘制.html#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-18"><a href="线段绘制.html#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> img <span class="op">=</span> Image<span class="op">(</span><span class="dv">200</span><span class="op">,</span> <span class="dv">200</span><span class="op">);</span></span>
+<span id="cb8-19"><a href="线段绘制.html#cb8-19" aria-hidden="true" tabindex="-1"></a>    DrawLine<span class="op">(</span>img<span class="op">,</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.2</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.6</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.6</span><span class="bu">f</span><span class="op">),</span> <span class="fl">0.01</span><span class="bu">f</span><span class="op">,</span> Color<span class="op">::</span>Red<span class="op">());</span></span>
+<span id="cb8-20"><a href="线段绘制.html#cb8-20" aria-hidden="true" tabindex="-1"></a>    img<span class="op">.</span>SaveAsPNG<span class="op">(</span><span class="st">&quot;line-0.01.png&quot;</span><span class="op">);</span></span>
+<span id="cb8-21"><a href="线段绘制.html#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>编译并运行上面的代码，得到</p>
+<p><img src="code/02-line/line-0.01.png" title="Line" /></p>
+<p>我们观察到<code>for (auto t = 0.0f; t &lt;= 1.0f; t += step)</code>这一层循环。由于计算机只能表示离散地数列，而无法表示连续的取值范围，我们只能通过一个极小数，0.01，的步进来拟合连续的表达。如果我们把这一个步进的步长取得过小，则会大幅度增加计算机的计算负担，实际上，当步长过小时，而我们整张图片的大小却只有200x200像素，这就意味着，每一小步增长甚至没有超出一个像素，那么有大量的像素被重新计算和重新着色。</p>
+<p>如果我们将步长取得过大，那么线段则会发生断裂的现象。</p>
+<p><img src="code/02-line/line-0.02.png" title="Line 0.02" /></p>
+<p>很显然，对于这个算法，我们必须精确控制参数<span class="math inline">\(t\)</span>的取值，才能得到完整的，同时又不过多绘制的线段。</p>
+</div>
+<div id="像素空间绘制" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> 像素空间绘制<a href="线段绘制.html#像素空间绘制" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>我们首先尝试解决第一个问题，如何避免参数<span class="math inline">\(t\)</span>的取值影响我们最后的呈现效果。</p>
+<p>从数学的角度出发，<span class="math inline">\(t\)</span>的取值越小，我们获得的结果一定越精确，当我们用微分<span class="math inline">\(dt\)</span>作为变化的时候，我们则可获得完整的连续的线段。另一方面，将数学定义的世界空间的线段转换成我们的图片的时候，最终的线段只会用有限个像素表达。由于线段是连续的，那么在其两个端点间，<span class="math inline">\([x_1,x_2]\)</span>，每一个<span class="math inline">\(x\)</span>一定有一个<span class="math inline">\(y\)</span>相对应。而在像素层面上来说，<span class="math inline">\(x\)</span>的取值个数是有限的，因此我们可以用如下方式绘制：</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode cc"><code class="sourceCode cpp"><span id="cb9-1"><a href="线段绘制.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Pre-defined data types</span></span>
+<span id="cb9-2"><a href="线段绘制.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;datatypes.hpp&quot;</span></span>
+<span id="cb9-3"><a href="线段绘制.html#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="线段绘制.html#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> SoftwareRenderer<span class="op">;</span></span>
+<span id="cb9-5"><a href="线段绘制.html#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="线段绘制.html#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> DrawLine<span class="op">(</span>Image<span class="op">&amp;</span> img<span class="op">,</span> Vector2f p1<span class="op">,</span> Vector2f p2<span class="op">,</span> Color color<span class="op">)</span></span>
+<span id="cb9-7"><a href="线段绘制.html#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb9-8"><a href="线段绘制.html#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> px1 <span class="op">=</span> p1<span class="op">.</span>x <span class="op">*</span> img<span class="op">.</span>Width<span class="op">(),</span> px2 <span class="op">=</span> p2<span class="op">.</span>x <span class="op">*</span> img<span class="op">.</span>Width<span class="op">();</span></span>
+<span id="cb9-9"><a href="线段绘制.html#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> py1 <span class="op">=</span> p1<span class="op">.</span>y <span class="op">*</span> img<span class="op">.</span>Height<span class="op">(),</span> py2 <span class="op">=</span> p2<span class="op">.</span>y <span class="op">*</span> img<span class="op">.</span>Height<span class="op">();</span></span>
+<span id="cb9-10"><a href="线段绘制.html#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span> x <span class="op">=</span> px1<span class="op">;</span> x <span class="op">&lt;=</span> px2<span class="op">;</span> x<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb9-11"><a href="线段绘制.html#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> t <span class="op">=</span> <span class="op">(</span>x <span class="op">-</span> px1<span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="dt">float</span><span class="op">)(</span>px2 <span class="op">-</span> px1<span class="op">);</span></span>
+<span id="cb9-12"><a href="线段绘制.html#cb9-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> y <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)(</span>t <span class="op">*</span> <span class="op">(</span>py2 <span class="op">-</span> py1<span class="op">)</span> <span class="op">+</span> py1<span class="op">);</span></span>
+<span id="cb9-13"><a href="线段绘制.html#cb9-13" aria-hidden="true" tabindex="-1"></a>        img<span class="op">.</span>SetColor<span class="op">(</span>x<span class="op">,</span> y<span class="op">,</span> color<span class="op">);</span></span>
+<span id="cb9-14"><a href="线段绘制.html#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-15"><a href="线段绘制.html#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb9-16"><a href="线段绘制.html#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="线段绘制.html#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
+<span id="cb9-18"><a href="线段绘制.html#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb9-19"><a href="线段绘制.html#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> img <span class="op">=</span> Image<span class="op">(</span><span class="dv">200</span><span class="op">,</span> <span class="dv">200</span><span class="op">);</span></span>
+<span id="cb9-20"><a href="线段绘制.html#cb9-20" aria-hidden="true" tabindex="-1"></a>    DrawLine<span class="op">(</span>img<span class="op">,</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.2</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.6</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.6</span><span class="bu">f</span><span class="op">),</span> Color<span class="op">::</span>Red<span class="op">());</span></span>
+<span id="cb9-21"><a href="线段绘制.html#cb9-21" aria-hidden="true" tabindex="-1"></a>    img<span class="op">.</span>SaveAsPNG<span class="op">(</span><span class="st">&quot;line-pixel-space.png&quot;</span><span class="op">);</span></span>
+<span id="cb9-22"><a href="线段绘制.html#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><img src="code/02-line/line-pixel-space.png" title="Line Pixel Space" /></p>
+<p>在像素空间进行计算和绘制，我们确保了取值范围内的横向的每一个<span class="math inline">\(x\)</span>都有一个<span class="math inline">\(y\)</span>与之相对应。并且更重要的是，这意味着线段在横轴上的投影一定是连续的。然而，线段在纵轴上的投影却并非如此。</p>
+<p>当前，线段的斜率为1，我们试着绘制两根额外的线段，绿色的线段斜率小于1，蓝色的线段斜率大于1。</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode cc"><code class="sourceCode cpp"><span id="cb10-1"><a href="线段绘制.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 斜率等于1</span></span>
+<span id="cb10-2"><a href="线段绘制.html#cb10-2" aria-hidden="true" tabindex="-1"></a>DrawLine<span class="op">(</span>img<span class="op">,</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.2</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.6</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.6</span><span class="bu">f</span><span class="op">),</span> Color<span class="op">::</span>Red<span class="op">());</span></span>
+<span id="cb10-3"><a href="线段绘制.html#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">// 斜率小于1</span></span>
+<span id="cb10-4"><a href="线段绘制.html#cb10-4" aria-hidden="true" tabindex="-1"></a>DrawLine<span class="op">(</span>img<span class="op">,</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.2</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.6</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.25</span><span class="bu">f</span><span class="op">),</span> Color<span class="op">::</span>Green<span class="op">());</span></span>
+<span id="cb10-5"><a href="线段绘制.html#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 斜率大于1</span></span>
+<span id="cb10-6"><a href="线段绘制.html#cb10-6" aria-hidden="true" tabindex="-1"></a>DrawLine<span class="op">(</span>img<span class="op">,</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.2</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.6</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.96</span><span class="bu">f</span><span class="op">),</span> Color<span class="op">::</span>Blue<span class="op">());</span></span></code></pre></div>
+<p><img src="code/02-line/line-pixel-space-2.png" title="Line Pixel Space 2" /></p>
+<p>我们可以发现，红色和绿色的线段可以被连续的绘制，然而蓝色的线段却出现了明显的断点。这是因为当斜率大于1时，线段的横轴的投影是连续的，然而线段的纵轴的投影却不连续。从像素层面解释，高度的像素的个数大于宽度的像素个数，如果我们还是依旧宽度进行采样，显然不能覆盖所有的高度像素。一个简单的解决方案是，当斜率大于1时，以高度作为循环进行采样，当斜率小于1时，以宽度作为循环进行采样。</p>
+</div>
+<div id="bresenham直线算法" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Bresenham直线算法<a href="线段绘制.html#bresenham直线算法" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>经过我们上一轮的改进，我们已经能够绘制基本的线段。但是我们的算法还有没有改进的余地，让绘制的效率变得更高呢？</p>
+<p>首先我们观察循环中的两次运算</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode cc"><code class="sourceCode cpp"><span id="cb11-1"><a href="线段绘制.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> t <span class="op">=</span> <span class="op">(</span>x <span class="op">-</span> px1<span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="dt">float</span><span class="op">)(</span>px2 <span class="op">-</span> px1<span class="op">);</span></span>
+<span id="cb11-2"><a href="线段绘制.html#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> y <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)(</span>t <span class="op">*</span> <span class="op">(</span>py2 <span class="op">-</span> py1<span class="op">)</span> <span class="op">+</span> py1<span class="op">);</span></span></code></pre></div>
+<p>当我们求系数<span class="math inline">\(t\)</span>的时候，用到了浮点除法，而大量的浮点运算无疑会降低绘制的效率。将浮点运算转换成整数运算，将除法运算转换成加法和减法运算能有效提高绘制效率。</p>
+<p>这里我们将介绍著名的Bresenham直线算法。Bresenham直线绘制算法由Jack Elton Bresenham于1962年在IBM工作时发明<span class="citation">(<a href="#ref-bresenham" role="doc-biblioref">Bresenham 1962</a>)</span>。由于算法简单易懂，并且绘制效率高效成为线段绘制的标准算法。</p>
+<p>我们再来回顾一下线段的绘制过程。</p>
+<p>我们从线段的一个端点出发，假使线段斜率小于等于1，且用横坐标扫描的方式进行绘制（对于斜率大于1的线段，我们可以通过纵坐标扫描的形式进行。由于算法是对称的，这里假定横坐标扫描），对于线段两个端点中的每一个<span class="math inline">\(x\)</span>，都可以计算出一个<span class="math inline">\(y\)</span>坐标。<strong>由于线段的斜率小于等于1，任意两个相邻的<span class="math inline">\(x\)</span>，其对应的<span class="math inline">\(y\)</span>要么相等，要么相差1</strong>。</p>
+
+</div>
+</div>
+<h3>文献引用<a href="文献引用.html#文献引用" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-bresenham" class="csl-entry">
+Bresenham. 1962. <span>“Bresenham’s Line Algorithm.”</span> <em>Wikipedia</em>. Wikimedia Foundation. <a href="https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm">https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="颜色和着色器.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="文献引用.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/SoftwareRenderer/book/edit/master/02-line.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["SoftwareRenderer.pdf", "SoftwareRenderer.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
