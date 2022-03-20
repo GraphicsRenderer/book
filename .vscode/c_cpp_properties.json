@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "name": "book",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/third_party"
+            ],
+            "cppStandard": "c++20"
+        }
+    ],
+    "version": 4
+}
