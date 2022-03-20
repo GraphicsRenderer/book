@@ -23,6 +23,22 @@ struct Vector2f {
     }
 };
 
+struct Vector2i {
+    int x;
+    int y;
+
+    explicit Vector2i()
+        : Vector2i(0, 0)
+    {
+    }
+
+    explicit Vector2i(int x, int y)
+        : x(x)
+        , y(y)
+    {
+    }
+};
+
 struct Color {
     char r;
     char g;

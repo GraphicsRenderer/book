@@ -14,6 +14,7 @@ titlepage: true
 titlepage-color: "34495e"
 titlepage-text-color: "ecf0f1"
 toc-own-page: true
+listings-disable-line-numbers: true
 
 mainfont: "LXGWWenKai-Regular"
 CJKmainfont: "LXGWWenKai-Regular"

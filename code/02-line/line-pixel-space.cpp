@@ -5,6 +5,7 @@ using namespace SoftwareRenderer;
 
 void DrawLine(Image& img, Vector2f p1, Vector2f p2, Color color)
 {
+    // 将屏幕坐标转换到像素空间
     int px1 = p1.x * img.Width(), px2 = p2.x * img.Width();
     int py1 = p1.y * img.Height(), py2 = p2.y * img.Height();
     for (auto x = px1; x <= px2; x++) {

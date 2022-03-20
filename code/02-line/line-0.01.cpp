@@ -9,6 +9,7 @@ void DrawLine(Image& img, Vector2f p1, Vector2f p2, float step, Color color)
     for (auto t = 0.0f; t <= 1.0f; t += step) {
         auto x = p1.x + t * lx;
         auto y = p1.y + t * ly;
+        // 将屏幕坐标转换到像素空间
         img.SetColor(img.Width() * x, img.Height() * y, color);
     }
 }
