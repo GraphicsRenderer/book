@@ -11,5 +11,6 @@ bookdown::gitbook:
 bookdown::pdf_book:
   template: templates/eisvogel.latex
   latex_engine: xelatex
+  keep_tex: yes
   pandoc_args: ["--top-level-division=chapter", "--listing", "--quiet"]
 bookdown::epub_book: default
