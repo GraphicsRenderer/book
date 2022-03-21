@@ -38,7 +38,7 @@ void DrawLine(Image& img, Vector2f p1, Vector2f p2, Color color)
         if (error > 0.5f) {
             // 如果斜率为正，则向上步进，否则向下步进
             y += p2i.y > p1i.y ? 1 : -1;
-            // error变为-1，重新计算累积error
+            // error-1，重制一个像素偏移，重新计算累积error
             error -= 1;
         }
     }
