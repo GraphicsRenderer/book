@@ -172,7 +172,10 @@ div.csl-indent {
 <li class="chapter" data-level="2.2" data-path="线段绘制.html"><a href="线段绘制.html#像素空间绘制"><i class="fa fa-check"></i><b>2.2</b> 像素空间绘制<span></span></a></li>
 <li class="chapter" data-level="2.3" data-path="线段绘制.html"><a href="线段绘制.html#bresenham直线算法"><i class="fa fa-check"></i><b>2.3</b> Bresenham直线算法<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="三角形绘制.html"><a href="三角形绘制.html"><i class="fa fa-check"></i><b>3</b> 三角形绘制<span></span></a></li>
+<li class="chapter" data-level="3" data-path="三角形绘制.html"><a href="三角形绘制.html"><i class="fa fa-check"></i><b>3</b> 三角形绘制<span></span></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="三角形绘制.html"><a href="三角形绘制.html#空心三角形渲染"><i class="fa fa-check"></i><b>3.1</b> 空心三角形渲染<span></span></a></li>
+</ul></li>
 <li><a href="文献引用.html#文献引用">文献引用<span></span></a></li>
 <li class="divider"></li>
 <li><a href="https://yiwei.dev" target="blank">https://yiwei.dev</a></li>
@@ -312,7 +315,7 @@ y = \vec{L}*t + (x_1,y_1)
 <span id="cb12-23"><a href="线段绘制.html#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb12-24"><a href="线段绘制.html#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-25"><a href="线段绘制.html#cb12-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> dx <span class="op">=</span> p2i<span class="op">.</span>x <span class="op">-</span> p1i<span class="op">.</span>x<span class="op">;</span></span>
-<span id="cb12-26"><a href="线段绘制.html#cb12-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> dy <span class="op">=</span> p2i<span class="op">.</span>y <span class="op">-</span> p1i<span class="op">.</span>x<span class="op">;</span></span>
+<span id="cb12-26"><a href="线段绘制.html#cb12-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> dy <span class="op">=</span> p2i<span class="op">.</span>y <span class="op">-</span> p1i<span class="op">.</span>y<span class="op">;</span></span>
 <span id="cb12-27"><a href="线段绘制.html#cb12-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> derror <span class="op">=</span> <span class="bu">std::</span>abs<span class="op">(</span>dy <span class="op">/</span> <span class="op">(</span><span class="dt">float</span><span class="op">)</span>dx<span class="op">);</span></span>
 <span id="cb12-28"><a href="线段绘制.html#cb12-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> error <span class="op">=</span> <span class="fl">0.0</span><span class="bu">f</span><span class="op">;</span></span>
 <span id="cb12-29"><a href="线段绘制.html#cb12-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> y <span class="op">=</span> p1i<span class="op">.</span>y<span class="op">;</span></span>
@@ -327,7 +330,7 @@ y = \vec{L}*t + (x_1,y_1)
 <span id="cb12-38"><a href="线段绘制.html#cb12-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>error <span class="op">&gt;</span> <span class="fl">0.5</span><span class="bu">f</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb12-39"><a href="线段绘制.html#cb12-39" aria-hidden="true" tabindex="-1"></a>            <span class="co">// 如果斜率为正，则向上步进，否则向下步进</span></span>
 <span id="cb12-40"><a href="线段绘制.html#cb12-40" aria-hidden="true" tabindex="-1"></a>            y <span class="op">+=</span> p2i<span class="op">.</span>y <span class="op">&gt;</span> p1i<span class="op">.</span>y <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
-<span id="cb12-41"><a href="线段绘制.html#cb12-41" aria-hidden="true" tabindex="-1"></a>            <span class="co">// error-1，重制一个像素偏移，重新计算累积error</span></span>
+<span id="cb12-41"><a href="线段绘制.html#cb12-41" aria-hidden="true" tabindex="-1"></a>            <span class="co">// error-1，重置一个像素偏移，重新计算累积error</span></span>
 <span id="cb12-42"><a href="线段绘制.html#cb12-42" aria-hidden="true" tabindex="-1"></a>            error <span class="op">-=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb12-43"><a href="线段绘制.html#cb12-43" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb12-44"><a href="线段绘制.html#cb12-44" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>

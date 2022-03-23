@@ -172,7 +172,10 @@ div.csl-indent {
 <li class="chapter" data-level="2.2" data-path="线段绘制.html"><a href="线段绘制.html#像素空间绘制"><i class="fa fa-check"></i><b>2.2</b> 像素空间绘制<span></span></a></li>
 <li class="chapter" data-level="2.3" data-path="线段绘制.html"><a href="线段绘制.html#bresenham直线算法"><i class="fa fa-check"></i><b>2.3</b> Bresenham直线算法<span></span></a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="三角形绘制.html"><a href="三角形绘制.html"><i class="fa fa-check"></i><b>3</b> 三角形绘制<span></span></a></li>
+<li class="chapter" data-level="3" data-path="三角形绘制.html"><a href="三角形绘制.html"><i class="fa fa-check"></i><b>3</b> 三角形绘制<span></span></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="三角形绘制.html"><a href="三角形绘制.html#空心三角形渲染"><i class="fa fa-check"></i><b>3.1</b> 空心三角形渲染<span></span></a></li>
+</ul></li>
 <li><a href="文献引用.html#文献引用">文献引用<span></span></a></li>
 <li class="divider"></li>
 <li><a href="https://yiwei.dev" target="blank">https://yiwei.dev</a></li>
@@ -197,7 +200,31 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="三角形绘制" class="section level1 hasAnchor" number="3">
 <h1><span class="header-section-number">Chapter 3</span> 三角形绘制<a href="三角形绘制.html#三角形绘制" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>在上一章节中，我们描述了基本的线段绘制的算法。线段是所有直线，射线，以及曲线的基本构成单元。对于一条曲线来说，我们可以通过利用微积分的思想，将曲线转换为一条一条细小的线段，通过控制线段的数量来控制曲线的平滑精度。而对于一个曲面来说，我们则可以通过渲染无数个细小的三角形来拟合。</p>
+<p>我们在此章节中，将会探索在2D平面下的三角形渲染。在掌握了2D三角形渲染的方法以后，对于一个立体的3D图形，无非通过投影变换将三维空间转换为二维平面，然后重复这个渲染过程。</p>
+<div id="空心三角形渲染" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> 空心三角形渲染<a href="三角形绘制.html#空心三角形渲染" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>我们已经利用Bresenham算法实现了<code>DrawLine</code>函数，对于空心三角形的绘制，无非是三角形三个端点使用<code>DrawLine</code>进行三次线段绘制。</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode cc"><code class="sourceCode cpp"><span id="cb13-1"><a href="三角形绘制.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;datatypes.hpp&quot;</span></span>
+<span id="cb13-2"><a href="三角形绘制.html#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="三角形绘制.html#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> SoftwareRenderer<span class="op">;</span></span>
+<span id="cb13-4"><a href="三角形绘制.html#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="三角形绘制.html#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> DrawTriangleFrame<span class="op">(</span>Image<span class="op">&amp;</span> img<span class="op">,</span> Vector2f p1<span class="op">,</span> Vector2f p2<span class="op">,</span> Vector2f p3<span class="op">,</span> Color color<span class="op">)</span></span>
+<span id="cb13-6"><a href="三角形绘制.html#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb13-7"><a href="三角形绘制.html#cb13-7" aria-hidden="true" tabindex="-1"></a>    DrawLine<span class="op">(</span>img<span class="op">,</span> p1<span class="op">,</span> p2<span class="op">,</span> color<span class="op">);</span></span>
+<span id="cb13-8"><a href="三角形绘制.html#cb13-8" aria-hidden="true" tabindex="-1"></a>    DrawLine<span class="op">(</span>img<span class="op">,</span> p2<span class="op">,</span> p3<span class="op">,</span> color<span class="op">);</span></span>
+<span id="cb13-9"><a href="三角形绘制.html#cb13-9" aria-hidden="true" tabindex="-1"></a>    DrawLine<span class="op">(</span>img<span class="op">,</span> p3<span class="op">,</span> p1<span class="op">,</span> color<span class="op">);</span></span>
+<span id="cb13-10"><a href="三角形绘制.html#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-11"><a href="三角形绘制.html#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="三角形绘制.html#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
+<span id="cb13-13"><a href="三角形绘制.html#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb13-14"><a href="三角形绘制.html#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> img <span class="op">=</span> Image<span class="op">(</span><span class="dv">200</span><span class="op">,</span> <span class="dv">200</span><span class="op">);</span></span>
+<span id="cb13-15"><a href="三角形绘制.html#cb13-15" aria-hidden="true" tabindex="-1"></a>    DrawTriangleFrame<span class="op">(</span>img<span class="op">,</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.2</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.6</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.6</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.3</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.6</span><span class="bu">f</span><span class="op">),</span> Color<span class="op">::</span>Red<span class="op">());</span></span>
+<span id="cb13-16"><a href="三角形绘制.html#cb13-16" aria-hidden="true" tabindex="-1"></a>    DrawTriangleFrame<span class="op">(</span>img<span class="op">,</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.5</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.1</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.8</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.9</span><span class="bu">f</span><span class="op">),</span> Color<span class="op">::</span>Green<span class="op">());</span></span>
+<span id="cb13-17"><a href="三角形绘制.html#cb13-17" aria-hidden="true" tabindex="-1"></a>    img<span class="op">.</span>SaveAsPNG<span class="op">(</span><span class="st">&quot;triangle-frame.png&quot;</span><span class="op">);</span></span>
+<span id="cb13-18"><a href="三角形绘制.html#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 
+</div>
 </div>
             </section>
 
