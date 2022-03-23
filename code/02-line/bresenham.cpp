@@ -23,7 +23,7 @@ void DrawLine(Image& img, Vector2f p1, Vector2f p2, Color color)
     }
 
     auto dx = p2i.x - p1i.x;
-    auto dy = p2i.y - p1i.x;
+    auto dy = p2i.y - p1i.y;
     auto derror = std::abs(dy / (float)dx);
     auto error = 0.0f;
     auto y = p1i.y;
