@@ -51,4 +51,5 @@ int main()
     DrawLine(img, Vector2f(0.2f, 0.2f), Vector2f(0.6f, 0.25f), Color::Green());
     DrawLine(img, Vector2f(0.2f, 0.2f), Vector2f(0.6f, 0.96f), Color::Blue());
     img.SaveAsPNG("bresenham.png");
+    return 0;
 }

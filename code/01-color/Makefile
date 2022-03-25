@@ -1,4 +1,4 @@
-CCFLAGS=-I../../third_party -O2 -std=c++20
+CCFLAGS=-Wall -Wextra -isystem ../../third_party -O2 -std=c++20
 
 build: *.cpp
 	g++ ${CCFLAGS} -o single-color.exe single-color.cpp

@@ -20,4 +20,5 @@ int main()
     auto img = Image(200, 200);
     DrawLine(img, Vector2f(0.2f, 0.2f), Vector2f(0.6f, 0.6f), Color::Red());
     img.SaveAsPNG("line-pixel-space.png");
+    return 0;
 }
