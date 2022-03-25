@@ -1,6 +1,5 @@
 #include "datatypes.hpp"
 
-#include <iostream>
 using namespace SoftwareRenderer;
 
 // 已知线段的两个端点，当一个点在线段上，并已知其y值，求x值
