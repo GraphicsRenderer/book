@@ -175,6 +175,7 @@ div.csl-indent {
 <li class="chapter" data-level="3" data-path="三角形绘制.html"><a href="三角形绘制.html"><i class="fa fa-check"></i><b>3</b> 三角形绘制<span></span></a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="三角形绘制.html"><a href="三角形绘制.html#空心三角形渲染"><i class="fa fa-check"></i><b>3.1</b> 空心三角形渲染<span></span></a></li>
+<li class="chapter" data-level="3.2" data-path="三角形绘制.html"><a href="三角形绘制.html#扫描线算法"><i class="fa fa-check"></i><b>3.2</b> 扫描线算法<span></span></a></li>
 </ul></li>
 <li><a href="文献引用.html#文献引用">文献引用<span></span></a></li>
 <li class="divider"></li>
@@ -222,7 +223,89 @@ div.csl-indent {
 <span id="cb13-15"><a href="三角形绘制.html#cb13-15" aria-hidden="true" tabindex="-1"></a>    DrawTriangleFrame<span class="op">(</span>img<span class="op">,</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.2</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.6</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.6</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.3</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.6</span><span class="bu">f</span><span class="op">),</span> Color<span class="op">::</span>Red<span class="op">());</span></span>
 <span id="cb13-16"><a href="三角形绘制.html#cb13-16" aria-hidden="true" tabindex="-1"></a>    DrawTriangleFrame<span class="op">(</span>img<span class="op">,</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.5</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.1</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.8</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.9</span><span class="bu">f</span><span class="op">),</span> Color<span class="op">::</span>Green<span class="op">());</span></span>
 <span id="cb13-17"><a href="三角形绘制.html#cb13-17" aria-hidden="true" tabindex="-1"></a>    img<span class="op">.</span>SaveAsPNG<span class="op">(</span><span class="st">&quot;triangle-frame.png&quot;</span><span class="op">);</span></span>
-<span id="cb13-18"><a href="三角形绘制.html#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb13-18"><a href="三角形绘制.html#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb13-19"><a href="三角形绘制.html#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>运行该程序我们就可以得到一个空心三角形。</p>
+<p><img src="code/03-triangle/triangle-frame.png" title="Triangle Frame" /></p>
+</div>
+<div id="扫描线算法" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> 扫描线算法<a href="三角形绘制.html#扫描线算法" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>通过线段绘制的办法，我们已经得到了一个空心的三角形。而对于实心三角形来说，一个朴素的想法是，我们从下至上，如同填色一样，一条线一条线的补全颜色，直到绘制完成整个三角形。</p>
+<p>由于我们不断的在三角形内部从左至右扫描并填，这个算法被称之为扫描线算法。现在让我们来讨论扫描线算法的实现细节。</p>
+<p>第一步，我们将三角形切分为上下两部分。</p>
+<p><img src="code/03-triangle/split-triangle.png" title="Split Triangle" /></p>
+<p>如上图所示，红色的三角形被经过B点的水平线，分成了上下两部分。上部分三角形由线段AC，BC和水平线BD围成，下半部分三角形则由AC，AB和水平线BD围成。A，B，C三点的确定只需要根据三角形的三个端点的y坐标从低到高排序即可。</p>
+<p>如果A和B处于同一水平线，y值相等，那么我们可以认为其下半部分ABD（或上半部分BDC）为空三角形，而只存在上半部分（或下半部分）三角形。</p>
+<p>经过如此切分以后，三角形的三条线段的方程都是已知的。那么我们关注三角形ABD，我们下往上，在线段AD上寻找一个点，然后做水平线，与AB相交，这条线段即我们的扫描线。这根扫描线明显处于三角形内部，那么我们把其经过的所有像素着色即可。</p>
+<p>我们用C++代码来表述这一过程：</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode cc"><code class="sourceCode cpp"><span id="cb14-1"><a href="三角形绘制.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;datatypes.hpp&quot;</span></span>
+<span id="cb14-2"><a href="三角形绘制.html#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="三角形绘制.html#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb14-4"><a href="三角形绘制.html#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> SoftwareRenderer<span class="op">;</span></span>
+<span id="cb14-5"><a href="三角形绘制.html#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="三角形绘制.html#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 已知线段的两个端点，当一个点在线段上，并已知其y值，求x值</span></span>
+<span id="cb14-7"><a href="三角形绘制.html#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> SolveLineX<span class="op">(</span>Vector2i p1<span class="op">,</span> Vector2i p2<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
+<span id="cb14-8"><a href="三角形绘制.html#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb14-9"><a href="三角形绘制.html#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// p1.y和p2.y应不相等，我们在扫描线循环中，规避了相等情况</span></span>
+<span id="cb14-10"><a href="三角形绘制.html#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="ot">assert</span><span class="op">(</span>p1<span class="op">.</span>y <span class="op">!=</span> p2<span class="op">.</span>y<span class="op">);</span></span>
+<span id="cb14-11"><a href="三角形绘制.html#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="三角形绘制.html#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> t <span class="op">=</span> <span class="op">(</span>y <span class="op">-</span> p1<span class="op">.</span>y<span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="dt">float</span><span class="op">)(</span>p2<span class="op">.</span>y <span class="op">-</span> p1<span class="op">.</span>y<span class="op">);</span></span>
+<span id="cb14-13"><a href="三角形绘制.html#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> t <span class="op">*</span> <span class="op">(</span>p2<span class="op">.</span>x <span class="op">-</span> p1<span class="op">.</span>x<span class="op">)</span> <span class="op">+</span> p1<span class="op">.</span>x<span class="op">;</span></span>
+<span id="cb14-14"><a href="三角形绘制.html#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb14-15"><a href="三角形绘制.html#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="三角形绘制.html#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co">// 从左端点到右端点扫描并着色</span></span>
+<span id="cb14-17"><a href="三角形绘制.html#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> LineSweep<span class="op">(</span>Image<span class="op">&amp;</span> img<span class="op">,</span> <span class="dt">int</span> xMin<span class="op">,</span> <span class="dt">int</span> xMax<span class="op">,</span> <span class="dt">int</span> y<span class="op">,</span> Color color<span class="op">)</span></span>
+<span id="cb14-18"><a href="三角形绘制.html#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb14-19"><a href="三角形绘制.html#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>xMin <span class="op">&gt;</span> xMax<span class="op">)</span></span>
+<span id="cb14-20"><a href="三角形绘制.html#cb14-20" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>swap<span class="op">(</span>xMin<span class="op">,</span> xMax<span class="op">);</span></span>
+<span id="cb14-21"><a href="三角形绘制.html#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="三角形绘制.html#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span> x <span class="op">=</span> xMin<span class="op">;</span> x <span class="op">&lt;=</span> xMax<span class="op">;</span> x<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb14-23"><a href="三角形绘制.html#cb14-23" aria-hidden="true" tabindex="-1"></a>        img<span class="op">.</span>SetColor<span class="op">(</span>x<span class="op">,</span> y<span class="op">,</span> color<span class="op">);</span></span>
+<span id="cb14-24"><a href="三角形绘制.html#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-25"><a href="三角形绘制.html#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb14-26"><a href="三角形绘制.html#cb14-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-27"><a href="三角形绘制.html#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> DrawTriangle<span class="op">(</span>Image<span class="op">&amp;</span> img<span class="op">,</span> Vector2f p1<span class="op">,</span> Vector2f p2<span class="op">,</span> Vector2f p3<span class="op">,</span> Color color<span class="op">)</span></span>
+<span id="cb14-28"><a href="三角形绘制.html#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb14-29"><a href="三角形绘制.html#cb14-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 将屏幕坐标转换到像素空间</span></span>
+<span id="cb14-30"><a href="三角形绘制.html#cb14-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> p1i <span class="op">=</span> Vector2i<span class="op">(</span>p1<span class="op">.</span>x <span class="op">*</span> img<span class="op">.</span>Width<span class="op">(),</span> p1<span class="op">.</span>y <span class="op">*</span> img<span class="op">.</span>Height<span class="op">());</span></span>
+<span id="cb14-31"><a href="三角形绘制.html#cb14-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> p2i <span class="op">=</span> Vector2i<span class="op">(</span>p2<span class="op">.</span>x <span class="op">*</span> img<span class="op">.</span>Width<span class="op">(),</span> p2<span class="op">.</span>y <span class="op">*</span> img<span class="op">.</span>Height<span class="op">());</span></span>
+<span id="cb14-32"><a href="三角形绘制.html#cb14-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> p3i <span class="op">=</span> Vector2i<span class="op">(</span>p3<span class="op">.</span>x <span class="op">*</span> img<span class="op">.</span>Width<span class="op">(),</span> p3<span class="op">.</span>y <span class="op">*</span> img<span class="op">.</span>Height<span class="op">());</span></span>
+<span id="cb14-33"><a href="三角形绘制.html#cb14-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-34"><a href="三角形绘制.html#cb14-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 将三角形三个坐标按y轴从低到高排序</span></span>
+<span id="cb14-35"><a href="三角形绘制.html#cb14-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>p1i<span class="op">.</span>y <span class="op">&gt;</span> p2i<span class="op">.</span>y<span class="op">)</span></span>
+<span id="cb14-36"><a href="三角形绘制.html#cb14-36" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>swap<span class="op">(</span>p1i<span class="op">,</span> p2i<span class="op">);</span></span>
+<span id="cb14-37"><a href="三角形绘制.html#cb14-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>p1i<span class="op">.</span>y <span class="op">&gt;</span> p3i<span class="op">.</span>y<span class="op">)</span></span>
+<span id="cb14-38"><a href="三角形绘制.html#cb14-38" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>swap<span class="op">(</span>p1i<span class="op">,</span> p3i<span class="op">);</span></span>
+<span id="cb14-39"><a href="三角形绘制.html#cb14-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>p2i<span class="op">.</span>y <span class="op">&gt;</span> p3i<span class="op">.</span>y<span class="op">)</span></span>
+<span id="cb14-40"><a href="三角形绘制.html#cb14-40" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>swap<span class="op">(</span>p2i<span class="op">,</span> p3i<span class="op">);</span></span>
+<span id="cb14-41"><a href="三角形绘制.html#cb14-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-42"><a href="三角形绘制.html#cb14-42" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 扫描下半部分三角形，如果三角形水平，p1i.y == p2i.y</span></span>
+<span id="cb14-43"><a href="三角形绘制.html#cb14-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 则该循环被跳过</span></span>
+<span id="cb14-44"><a href="三角形绘制.html#cb14-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span> y <span class="op">=</span> p1i<span class="op">.</span>y<span class="op">;</span> y <span class="op">&lt;</span> p2i<span class="op">.</span>y<span class="op">;</span> y<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb14-45"><a href="三角形绘制.html#cb14-45" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> xMin <span class="op">=</span> SolveLineX<span class="op">(</span>p1i<span class="op">,</span> p3i<span class="op">,</span> y<span class="op">);</span></span>
+<span id="cb14-46"><a href="三角形绘制.html#cb14-46" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> xMax <span class="op">=</span> SolveLineX<span class="op">(</span>p1i<span class="op">,</span> p2i<span class="op">,</span> y<span class="op">);</span></span>
+<span id="cb14-47"><a href="三角形绘制.html#cb14-47" aria-hidden="true" tabindex="-1"></a>        LineSweep<span class="op">(</span>img<span class="op">,</span> xMin<span class="op">,</span> xMax<span class="op">,</span> y<span class="op">,</span> color<span class="op">);</span></span>
+<span id="cb14-48"><a href="三角形绘制.html#cb14-48" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-49"><a href="三角形绘制.html#cb14-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-50"><a href="三角形绘制.html#cb14-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 扫描上半部分三角形，如果三角形水平，p2i.y == p3i.y</span></span>
+<span id="cb14-51"><a href="三角形绘制.html#cb14-51" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 则该循环被跳过</span></span>
+<span id="cb14-52"><a href="三角形绘制.html#cb14-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span> y <span class="op">=</span> p2i<span class="op">.</span>y<span class="op">;</span> y <span class="op">&lt;</span> p3i<span class="op">.</span>y<span class="op">;</span> y<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb14-53"><a href="三角形绘制.html#cb14-53" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> xMin <span class="op">=</span> SolveLineX<span class="op">(</span>p1i<span class="op">,</span> p3i<span class="op">,</span> y<span class="op">);</span></span>
+<span id="cb14-54"><a href="三角形绘制.html#cb14-54" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> xMax <span class="op">=</span> SolveLineX<span class="op">(</span>p2i<span class="op">,</span> p3i<span class="op">,</span> y<span class="op">);</span></span>
+<span id="cb14-55"><a href="三角形绘制.html#cb14-55" aria-hidden="true" tabindex="-1"></a>        LineSweep<span class="op">(</span>img<span class="op">,</span> xMin<span class="op">,</span> xMax<span class="op">,</span> y<span class="op">,</span> color<span class="op">);</span></span>
+<span id="cb14-56"><a href="三角形绘制.html#cb14-56" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-57"><a href="三角形绘制.html#cb14-57" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb14-58"><a href="三角形绘制.html#cb14-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-59"><a href="三角形绘制.html#cb14-59" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
+<span id="cb14-60"><a href="三角形绘制.html#cb14-60" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb14-61"><a href="三角形绘制.html#cb14-61" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> img <span class="op">=</span> Image<span class="op">(</span><span class="dv">200</span><span class="op">,</span> <span class="dv">200</span><span class="op">);</span></span>
+<span id="cb14-62"><a href="三角形绘制.html#cb14-62" aria-hidden="true" tabindex="-1"></a>    DrawTriangle<span class="op">(</span>img<span class="op">,</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.2</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.6</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.6</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.3</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.6</span><span class="bu">f</span><span class="op">),</span> Color<span class="op">::</span>Red<span class="op">());</span></span>
+<span id="cb14-63"><a href="三角形绘制.html#cb14-63" aria-hidden="true" tabindex="-1"></a>    DrawTriangle<span class="op">(</span>img<span class="op">,</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.5</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.1</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.8</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.9</span><span class="bu">f</span><span class="op">),</span> Color<span class="op">::</span>Green<span class="op">());</span></span>
+<span id="cb14-64"><a href="三角形绘制.html#cb14-64" aria-hidden="true" tabindex="-1"></a>    img<span class="op">.</span>SaveAsPNG<span class="op">(</span><span class="st">&quot;line-sweeping.png&quot;</span><span class="op">);</span></span>
+<span id="cb14-65"><a href="三角形绘制.html#cb14-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb14-66"><a href="三角形绘制.html#cb14-66" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>运行代码得到</p>
+<p><img src="code/03-triangle/line-sweeping.png" title="Line Sweeping" /></p>
 
 </div>
 </div>

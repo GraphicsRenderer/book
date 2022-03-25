@@ -175,6 +175,7 @@ div.csl-indent {
 <li class="chapter" data-level="3" data-path="三角形绘制.html"><a href="三角形绘制.html"><i class="fa fa-check"></i><b>3</b> 三角形绘制<span></span></a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="三角形绘制.html"><a href="三角形绘制.html#空心三角形渲染"><i class="fa fa-check"></i><b>3.1</b> 空心三角形渲染<span></span></a></li>
+<li class="chapter" data-level="3.2" data-path="三角形绘制.html"><a href="三角形绘制.html#扫描线算法"><i class="fa fa-check"></i><b>3.2</b> 扫描线算法<span></span></a></li>
 </ul></li>
 <li><a href="文献引用.html#文献引用">文献引用<span></span></a></li>
 <li class="divider"></li>
@@ -267,7 +268,8 @@ y = \vec{L}*t + (x_1,y_1)
 <span id="cb9-20"><a href="线段绘制.html#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> img <span class="op">=</span> Image<span class="op">(</span><span class="dv">200</span><span class="op">,</span> <span class="dv">200</span><span class="op">);</span></span>
 <span id="cb9-21"><a href="线段绘制.html#cb9-21" aria-hidden="true" tabindex="-1"></a>    DrawLine<span class="op">(</span>img<span class="op">,</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.2</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.6</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.6</span><span class="bu">f</span><span class="op">),</span> Color<span class="op">::</span>Red<span class="op">());</span></span>
 <span id="cb9-22"><a href="线段绘制.html#cb9-22" aria-hidden="true" tabindex="-1"></a>    img<span class="op">.</span>SaveAsPNG<span class="op">(</span><span class="st">&quot;line-pixel-space.png&quot;</span><span class="op">);</span></span>
-<span id="cb9-23"><a href="线段绘制.html#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb9-23"><a href="线段绘制.html#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb9-24"><a href="线段绘制.html#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p><img src="code/02-line/line-pixel-space.png" title="Line Pixel Space" /></p>
 <p>在像素空间进行计算和绘制，我们确保了取值范围内的横向的每一个<span class="math inline">\(x\)</span>都有一个<span class="math inline">\(y\)</span>与之相对应。并且更重要的是，这意味着线段在横轴上的投影一定是连续的。然而，线段在纵轴上的投影却并非如此。</p>
 <p>当前，线段的斜率为1，我们试着绘制两根额外的线段，绿色的线段斜率小于1，蓝色的线段斜率大于1。</p>
@@ -298,8 +300,8 @@ y = \vec{L}*t + (x_1,y_1)
 <span id="cb12-6"><a href="线段绘制.html#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> DrawLine<span class="op">(</span>Image<span class="op">&amp;</span> img<span class="op">,</span> Vector2f p1<span class="op">,</span> Vector2f p2<span class="op">,</span> Color color<span class="op">)</span></span>
 <span id="cb12-7"><a href="线段绘制.html#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb12-8"><a href="线段绘制.html#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 将屏幕坐标转换到像素空间</span></span>
-<span id="cb12-9"><a href="线段绘制.html#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> p1i <span class="op">=</span> Vector2i<span class="op">((</span><span class="dt">int</span><span class="op">)(</span>p1<span class="op">.</span>x <span class="op">*</span> img<span class="op">.</span>Width<span class="op">()),</span> <span class="op">(</span><span class="dt">int</span><span class="op">)(</span>p1<span class="op">.</span>y <span class="op">*</span> img<span class="op">.</span>Height<span class="op">()));</span></span>
-<span id="cb12-10"><a href="线段绘制.html#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> p2i <span class="op">=</span> Vector2i<span class="op">((</span><span class="dt">int</span><span class="op">)(</span>p2<span class="op">.</span>x <span class="op">*</span> img<span class="op">.</span>Width<span class="op">()),</span> <span class="op">(</span><span class="dt">int</span><span class="op">)(</span>p2<span class="op">.</span>y <span class="op">*</span> img<span class="op">.</span>Height<span class="op">()));</span></span>
+<span id="cb12-9"><a href="线段绘制.html#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> p1i <span class="op">=</span> Vector2i<span class="op">(</span>p1<span class="op">.</span>x <span class="op">*</span> img<span class="op">.</span>Width<span class="op">(),</span> p1<span class="op">.</span>y <span class="op">*</span> img<span class="op">.</span>Height<span class="op">());</span></span>
+<span id="cb12-10"><a href="线段绘制.html#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> p2i <span class="op">=</span> Vector2i<span class="op">(</span>p2<span class="op">.</span>x <span class="op">*</span> img<span class="op">.</span>Width<span class="op">(),</span> p2<span class="op">.</span>y <span class="op">*</span> img<span class="op">.</span>Height<span class="op">());</span></span>
 <span id="cb12-11"><a href="线段绘制.html#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-12"><a href="线段绘制.html#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 如果斜率大于1，我们将x和y交换，从而统一为横扫描</span></span>
 <span id="cb12-13"><a href="线段绘制.html#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> steep <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
@@ -343,7 +345,8 @@ y = \vec{L}*t + (x_1,y_1)
 <span id="cb12-51"><a href="线段绘制.html#cb12-51" aria-hidden="true" tabindex="-1"></a>    DrawLine<span class="op">(</span>img<span class="op">,</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.2</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.6</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.25</span><span class="bu">f</span><span class="op">),</span> Color<span class="op">::</span>Green<span class="op">());</span></span>
 <span id="cb12-52"><a href="线段绘制.html#cb12-52" aria-hidden="true" tabindex="-1"></a>    DrawLine<span class="op">(</span>img<span class="op">,</span> Vector2f<span class="op">(</span><span class="fl">0.2</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.2</span><span class="bu">f</span><span class="op">),</span> Vector2f<span class="op">(</span><span class="fl">0.6</span><span class="bu">f</span><span class="op">,</span> <span class="fl">0.96</span><span class="bu">f</span><span class="op">),</span> Color<span class="op">::</span>Blue<span class="op">());</span></span>
 <span id="cb12-53"><a href="线段绘制.html#cb12-53" aria-hidden="true" tabindex="-1"></a>    img<span class="op">.</span>SaveAsPNG<span class="op">(</span><span class="st">&quot;bresenham.png&quot;</span><span class="op">);</span></span>
-<span id="cb12-54"><a href="线段绘制.html#cb12-54" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb12-54"><a href="线段绘制.html#cb12-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb12-55"><a href="线段绘制.html#cb12-55" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>编译运行上述程序，我们得到完美的线段渲染。</p>
 <p><img src="code/02-line/bresenham.png" title="Bresenham" /></p>
 
