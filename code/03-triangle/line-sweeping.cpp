@@ -13,17 +13,6 @@ int SolveLineX(Vector2i p1, Vector2i p2, int y)
     return t * (p2.x - p1.x) + p1.x;
 }
 
-// 从左端点到右端点扫描并着色
-void LineSweep(Image& img, int xMin, int xMax, int y, Color color)
-{
-    if (xMin > xMax)
-        std::swap(xMin, xMax);
-
-    for (auto x = xMin; x <= xMax; x++) {
-        img.SetColor(x, y, color);
-    }
-}
-
 void DrawTriangle(Image& img, Vector2f p1, Vector2f p2, Vector2f p3, Color color)
 {
     // 将屏幕坐标转换到像素空间
@@ -44,7 +33,7 @@ void DrawTriangle(Image& img, Vector2f p1, Vector2f p2, Vector2f p3, Color color
     for (auto y = p1i.y; y < p2i.y; y++) {
         auto xMin = SolveLineX(p1i, p3i, y);
         auto xMax = SolveLineX(p1i, p2i, y);
-        LineSweep(img, xMin, xMax, y, color);
+        DrawLine(img, Vector2i(xMin, y), Vector2i(xMax, y), color);
     }
 
     // 扫描上半部分三角形，如果三角形水平，p2i.y == p3i.y
@@ -52,7 +41,7 @@ void DrawTriangle(Image& img, Vector2f p1, Vector2f p2, Vector2f p3, Color color
     for (auto y = p2i.y; y < p3i.y; y++) {
         auto xMin = SolveLineX(p1i, p3i, y);
         auto xMax = SolveLineX(p2i, p3i, y);
-        LineSweep(img, xMin, xMax, y, color);
+        DrawLine(img, Vector2i(xMin, y), Vector2i(xMax, y), color);
     }
 }
 

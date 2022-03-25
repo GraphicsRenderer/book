@@ -137,12 +137,8 @@ public:
     }
 };
 
-void DrawLine(Image& img, Vector2f p1, Vector2f p2, Color color)
+void DrawLine(Image& img, Vector2i p1i, Vector2i p2i, Color color)
 {
-    // 将屏幕坐标转换到像素空间
-    auto p1i = Vector2i((int)(p1.x * img.Width()), (int)(p1.y * img.Height()));
-    auto p2i = Vector2i((int)(p2.x * img.Width()), (int)(p2.y * img.Height()));
-
     // 如果斜率大于1，我们将x和y交换，从而统一为横扫描
     auto steep = false;
     if (std::abs(p1i.x - p2i.x) < std::abs(p1i.y - p2i.y)) {
@@ -176,5 +172,13 @@ void DrawLine(Image& img, Vector2f p1, Vector2f p2, Color color)
             error -= 1;
         }
     }
+}
+
+void DrawLine(Image& img, Vector2f p1, Vector2f p2, Color color)
+{
+    // 将屏幕坐标转换到像素空间
+    auto p1i = Vector2i((int)(p1.x * img.Width()), (int)(p1.y * img.Height()));
+    auto p2i = Vector2i((int)(p2.x * img.Width()), (int)(p2.y * img.Height()));
+    DrawLine(img, p1i, p2i, color);
 }
 } // namespace SoftwareRenderer

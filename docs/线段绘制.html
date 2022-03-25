@@ -171,6 +171,8 @@ div.csl-indent {
 <li class="chapter" data-level="2.1" data-path="线段绘制.html"><a href="线段绘制.html#线段的参数方程绘制"><i class="fa fa-check"></i><b>2.1</b> 线段的参数方程绘制<span></span></a></li>
 <li class="chapter" data-level="2.2" data-path="线段绘制.html"><a href="线段绘制.html#像素空间绘制"><i class="fa fa-check"></i><b>2.2</b> 像素空间绘制<span></span></a></li>
 <li class="chapter" data-level="2.3" data-path="线段绘制.html"><a href="线段绘制.html#bresenham直线算法"><i class="fa fa-check"></i><b>2.3</b> Bresenham直线算法<span></span></a></li>
+<li class="chapter" data-level="2.4" data-path="线段绘制.html"><a href="线段绘制.html#小结-1"><i class="fa fa-check"></i><b>2.4</b> 小结<span></span></a></li>
+<li class="chapter" data-level="2.5" data-path="线段绘制.html"><a href="线段绘制.html#思考和扩展-1"><i class="fa fa-check"></i><b>2.5</b> 思考和扩展<span></span></a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="三角形绘制.html"><a href="三角形绘制.html"><i class="fa fa-check"></i><b>3</b> 三角形绘制<span></span></a>
 <ul>
@@ -353,6 +355,17 @@ y = \vec{L}*t + (x_1,y_1)
 <span id="cb12-55"><a href="线段绘制.html#cb12-55" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>编译运行上述程序，我们得到完美的线段渲染。</p>
 <p><img src="code/02-line/bresenham.png" title="Bresenham" /></p>
+</div>
+<div id="小结-1" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> 小结<a href="线段绘制.html#小结-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>在本章节中，我们讨论了一个基本问题，如何绘制一条线段，并且通过几个简单的算法来展示了这一过程。值得注意的是，线段绘制的过程实际上是一个从连续的空间到一个离散空间的映射。由于离散空间的关系，不同的算法会产生不同的线段，有些出现了断点，而有些则没有。然而从数学意义上说，他们都是等价的。由此可见，选取一个好的映射方案能带给我们不一样的绘制效果。最后Bresenham算法，通过将浮点乘法和除法运算转换为加法运算的方式，给我们展示了更高效的线段绘制方案。</p>
+<p>线段绘制是光栅化基础，在下一章三角形绘制中，我们首先会介绍扫描线算法，并了解如何利用线段绘制来绘制三角形。</p>
+</div>
+<div id="思考和扩展-1" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> 思考和扩展<a href="线段绘制.html#思考和扩展-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>为什么我们要使用像素空间坐标而不是屏幕空间进行绘制？</li>
+</ol>
 
 </div>
 </div>
