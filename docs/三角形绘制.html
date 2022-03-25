@@ -176,6 +176,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="3.1" data-path="三角形绘制.html"><a href="三角形绘制.html#空心三角形渲染"><i class="fa fa-check"></i><b>3.1</b> 空心三角形渲染<span></span></a></li>
 <li class="chapter" data-level="3.2" data-path="三角形绘制.html"><a href="三角形绘制.html#扫描线算法"><i class="fa fa-check"></i><b>3.2</b> 扫描线算法<span></span></a></li>
+<li class="chapter" data-level="3.3" data-path="三角形绘制.html"><a href="三角形绘制.html#包围盒测试算法"><i class="fa fa-check"></i><b>3.3</b> 包围盒测试算法<span></span></a></li>
 </ul></li>
 <li><a href="文献引用.html#文献引用">文献引用<span></span></a></li>
 <li class="divider"></li>
@@ -201,6 +202,9 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="三角形绘制" class="section level1 hasAnchor" number="3">
 <h1><span class="header-section-number">Chapter 3</span> 三角形绘制<a href="三角形绘制.html#三角形绘制" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<blockquote>
+<p>本章节算法和代码引用了Dmitry V. Sokolov的tinyrenderer第二章三角形光栅化过程<span class="citation">(<a href="#ref-tinyrenderer2" role="doc-biblioref">Sokolov 2022b</a>)</span>。在原算法的基础上，本章节做了整理、改进和重构。感谢Dmitry V. Sokolov将这一段算法整理成册，并开源地发布在GitHub供所有人使用。</p>
+</blockquote>
 <p>在上一章节中，我们描述了基本的线段绘制的算法。线段是所有直线，射线，以及曲线的基本构成单元。对于一条曲线来说，我们可以通过利用微积分的思想，将曲线转换为一条一条细小的线段，通过控制线段的数量来控制曲线的平滑精度。而对于一个曲面来说，我们则可以通过渲染无数个细小的三角形来拟合。</p>
 <p>我们在此章节中，将会探索在2D平面下的三角形渲染。在掌握了2D三角形渲染的方法以后，对于一个立体的3D图形，无非通过投影变换将三维空间转换为二维平面，然后重复这个渲染过程。</p>
 <div id="空心三角形渲染" class="section level2 hasAnchor" number="3.1">
@@ -306,7 +310,16 @@ div.csl-indent {
 <span id="cb14-66"><a href="三角形绘制.html#cb14-66" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>运行代码得到</p>
 <p><img src="code/03-triangle/line-sweeping.png" title="Line Sweeping" /></p>
+</div>
+<div id="包围盒测试算法" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> 包围盒测试算法<a href="三角形绘制.html#包围盒测试算法" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
+</div>
+</div>
+<h3>文献引用<a href="文献引用.html#文献引用" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-tinyrenderer2" class="csl-entry">
+———. 2022b. <span>“Lesson 2: Triangle Rasterization and Back Face Culling.”</span> <em>GitHub</em>. GitHub, ssloy/tinyrenderer. <a href="https://github.com/ssloy/tinyrenderer/wiki/Lesson-2:-Triangle-rasterization-and-back-face-culling">https://github.com/ssloy/tinyrenderer/wiki/Lesson-2:-Triangle-rasterization-and-back-face-culling</a>.
 </div>
 </div>
             </section>
